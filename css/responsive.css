@@ -1,0 +1,92 @@
+
+/* =====================================
+   DEXO3 RESPONSIVE DESIGN
+===================================== */
+
+/* TABLETS */
+
+@media (max-width: 1024px) {
+  :root {
+    --container-width: 900px;
+  }
+
+  .dexo-grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dexo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dexo-hero {
+    min-height: 560px;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 760px) {
+  .dexo-container {
+    width: min(100% - 30px, var(--container-width));
+  }
+
+  .dexo-section {
+    padding-block: 60px;
+  }
+
+  .dexo-grid,
+  .dexo-grid-2,
+  .dexo-grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .dexo-hero {
+    min-height: 500px;
+    padding-block: 70px;
+  }
+
+  .dexo-hero p {
+    font-size: 1rem;
+  }
+
+  .section-heading {
+    margin-bottom: 30px;
+  }
+
+  .dexo-btn {
+    padding: 12px 17px;
+  }
+}
+
+/* SMALL PHONES */
+
+@media (max-width: 430px) {
+  h1 {
+    font-size: 2.35rem;
+  }
+
+  h2 {
+    font-size: 1.85rem;
+  }
+
+  .dexo-container {
+    width: calc(100% - 24px);
+  }
+
+  .dexo-hero {
+    min-height: 450px;
+  }
+}
+
+/* REDUCED SCREEN MOTION */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

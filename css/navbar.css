@@ -1,0 +1,110 @@
+
+/* =====================================
+   DEXO3 NAVIGATION
+===================================== */
+
+.dexo-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  min-height: var(--navbar-height);
+  padding: 12px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  background: rgba(8,13,25,.88);
+  border-bottom: 1px solid var(--dexo-border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.dexo-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--dexo-text);
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.dexo-brand-icon {
+  width: 37px;
+  height: 37px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--dexo-gradient);
+  color: white;
+}
+
+.brand-blue {
+  color: var(--dexo-blue-light);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.nav-links a {
+  color: var(--dexo-muted);
+  font-size: .92rem;
+  transition: color .2s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--dexo-blue-light);
+}
+
+.nav-cta {
+  padding: 10px 17px;
+  border-radius: var(--radius-md);
+  background: var(--dexo-gradient);
+  color: white;
+  font-weight: 650;
+}
+
+.nav-toggle {
+  display: none;
+  padding: 8px 12px;
+  border: 1px solid var(--dexo-border);
+  border-radius: 9px;
+  background: var(--dexo-surface);
+  color: white;
+  font-size: 20px;
+}
+
+@media (max-width: 760px) {
+  .dexo-navbar {
+    padding-inline: 16px;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-cta {
+    display: none;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: var(--dexo-bg);
+    border-bottom: 1px solid var(--dexo-border);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+}

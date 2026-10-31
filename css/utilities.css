@@ -1,0 +1,90 @@
+
+/* =====================================
+   DEXO3 UTILITIES
+===================================== */
+
+/* DISPLAY */
+
+.d-flex { display: flex; }
+.d-grid { display: grid; }
+.d-block { display: block; }
+.d-inline { display: inline; }
+.d-none { display: none; }
+
+/* FLEX */
+
+.flex-wrap { flex-wrap: wrap; }
+.flex-column { flex-direction: column; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+
+/* GAP */
+
+.gap-1 { gap: 4px; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.gap-5 { gap: 24px; }
+.gap-6 { gap: 32px; }
+
+/* SPACING */
+
+.mt-1 { margin-top: 4px; }
+.mt-2 { margin-top: 8px; }
+.mt-3 { margin-top: 12px; }
+.mt-4 { margin-top: 16px; }
+.mt-5 { margin-top: 24px; }
+
+.mb-1 { margin-bottom: 4px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-3 { margin-bottom: 12px; }
+.mb-4 { margin-bottom: 16px; }
+.mb-5 { margin-bottom: 24px; }
+
+.p-1 { padding: 4px; }
+.p-2 { padding: 8px; }
+.p-3 { padding: 12px; }
+.p-4 { padding: 16px; }
+.p-5 { padding: 24px; }
+
+/* WIDTH */
+
+.w-full { width: 100%; }
+.w-auto { width: auto; }
+.max-w-full { max-width: 100%; }
+
+/* TEXT */
+
+.text-white { color: #fff; }
+.text-muted { color: var(--dexo-muted); }
+.text-blue { color: var(--dexo-blue-light); }
+.text-success { color: var(--dexo-success); }
+.text-danger { color: var(--dexo-danger); }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+
+/* BACKGROUND */
+
+.bg-dark { background: var(--dexo-bg); }
+.bg-surface { background: var(--dexo-surface); }
+.bg-blue { background: var(--dexo-blue); }
+
+/* BORDERS */
+
+.border { border: 1px solid var(--dexo-border); }
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-md { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-full { border-radius: var(--radius-full); }
+
+/* OTHER */
+
+.overflow-hidden { overflow: hidden; }
+.relative { position: relative; }
+.pointer { cursor: pointer; }
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }

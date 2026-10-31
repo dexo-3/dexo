@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dexo3 coding studio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        studio: {
+                            bg: '#1e1e2e',
+                            sidebar: '#181825',
+                            card: '#313244',
+                            active: '#45475a',
+                            border: '#45475a',
+                            accent: '#89b4fa',
+                            text: '#cdd6f4',
+                            muted: '#a6adc8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- CodeMirror 5 CSS & Scripts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/eclipse.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <!-- CodeMirror Modes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
+
+    <!-- CodeMirror Addons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/selection/active-line.min.js"></script>
+
+    <!-- JSZip for exporting zip files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Pyodide for Browser-Side Python execution -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+
+    <!-- JS Beautifier for Formatting Code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-html.min.js"></script>
+
+    <style>
+        .CodeMirror {
+            height: 100% !important;
+            font-family: 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 14px;
+        }
+        .gutter-drag-x {
+            cursor: col-resize;
+            width: 4px;
+            transition: background-color 0.2s;
+        }
+        .gutter-drag-x:hover, .gutter-drag-x.active {
+            background-color: #89b4fa;
+        }
+        .gutter-drag-y {
+            cursor: row-resize;
+            height: 4px;
+            transition: background-color 0.2s;
+        }
+        .gutter-drag-y:hover, .gutter-drag-y.active {
+            background-color: #89b4fa;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-studio-bg text-studio-text h-screen w-screen flex flex-col overflow-hidden select-none">
+
+    <!-- Top Header Navigation -->
+    <header class="h-12 border-b border-studio-border bg-studio-sidebar flex items-center justify-between px-4 z-10 shrink-0">
+        <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-2 text-studio-accent font-bold text-lg">
+                <i data-lucide="code-2" class="w-6 h-6"></i>
+                <span>Dexo3 Coding studio</span>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded bg-studio-card text-studio-muted">v2.5</span>
+            <input id="project-title" type="text" value="My Project Workspace" class="bg-transparent hover:bg-studio-card focus:bg-studio-card border border-transparent focus:border-studio-border rounded px-2 py-1 text-sm font-medium transition text-studio-text focus:outline-none" />
+        </div>
+
+        <!-- Header Action Controls -->
+        <div class="flex items-center space-x-2">
+            <button id="btn-run" onclick="runProject()" class="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded shadow transition font-medium">
+                <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                <span>Run (Ctrl+Enter)</span>
+            </button>
+            <button id="btn-format" onclick="formatActiveFile()" class="flex items-center space-x-1.5 bg-studio-card hover:bg-studio-active text-studio-text text-xs px-2.5 py-1.5 rounded transition">
+                <i data-lucide="wand-2" class="w-4 h-4"></i>
+                <span>Format</span>
+            </button>
+            <button id="btn-save" onclick="saveWorkspace()" class="flex items-center space-x-1.5 bg-studio-card hover:bg-studio-active text-studio-text text-xs px-2.5 py-1.5 rounded transition">
+                <i data-lucide="save" class="w-4 h-4"></i>
+                <span>Save</span>
+            </button>
+            <button id="btn-export" onclick="exportProjectZip()" class="flex items-center space-x-1.5 bg-studio-card hover:bg-studio-active text-studio-text text-xs px-2.5 py-1.5 rounded transition">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>Export ZIP</span>
+            </button>
+            <label class="flex items-center space-x-1.5 bg-studio-card hover:bg-studio-active text-studio-text text-xs px-2.5 py-1.5 rounded transition cursor-pointer">
+                <i data-lucide="upload" class="w-4 h-4"></i>
+                <span>Import</span>
+                <input type="file" id="file-import" multiple onchange="importFiles(event)" class="hidden" />
+            </label>
+            <div class="h-4 w-px bg-studio-border my-auto"></div>
+            <button onclick="toggleTheme()" class="p-1.5 rounded hover:bg-studio-card text-studio-muted hover:text-studio-text transition" title="Toggle Light/Dark Theme">
+                <i data-lucide="sun" id="theme-icon" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace Area -->
+    <div class="flex-1 flex overflow-hidden">
+        
+        <!-- Activity Icon Bar -->
+        <div class="w-12 bg-studio-sidebar border-r border-studio-border flex flex-col items-center py-3 space-y-4 shrink-0 text-studio-muted">
+            <button onclick="switchSidebarTab('explorer')" id="nav-btn-explorer" class="p-2 rounded hover:bg-studio-card text-studio-accent transition" title="File Explorer">
+                <i data-lucide="files" class="w-5 h-5"></i>
+            </button>
+            <button onclick="switchSidebarTab('search')" id="nav-btn-search" class="p-2 rounded hover:bg-studio-card transition" title="Search Across Files">
+                <i data-lucide="search" class="w-5 h-5"></i>
+            </button>
+            <button onclick="switchSidebarTab('snippets')" id="nav-btn-snippets" class="p-2 rounded hover:bg-studio-card transition" title="Code Snippets">
+                <i data-lucide="box" class="w-5 h-5"></i>
+            </button>
+            <button onclick="switchSidebarTab('settings')" id="nav-btn-settings" class="p-2 rounded hover:bg-studio-card transition" title="Settings">
+                <i data-lucide="settings" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Expanded Sidebar Panel -->
+        <div id="sidebar-panel" class="w-64 bg-studio-sidebar border-r border-studio-border flex flex-col shrink-0">
+            <!-- Sidebar Header -->
+            <div class="h-9 px-3 flex items-center justify-between border-b border-studio-border text-xs font-semibold tracking-wide uppercase text-studio-muted">
+                <span id="sidebar-title">Explorer</span>
+                <div class="flex items-center space-x-1" id="explorer-actions">
+                    <button onclick="createNewFilePrompt()" class="p-1 hover:bg-studio-card rounded" title="New File">
+                        <i data-lucide="file-plus" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Content Pane: Explorer -->
+            <div id="tab-explorer" class="flex-1 overflow-y-auto p-2">
+                <div id="file-tree" class="space-y-1"></div>
+            </div>
+
+            <!-- Tab Content Pane: Search -->
+            <div id="tab-search" class="flex-1 overflow-y-auto p-3 hidden space-y-3">
+                <div>
+                    <label class="text-xs text-studio-muted block mb-1">Search Term</label>
+                    <input type="text" id="search-input" onkeyup="performSearch()" placeholder="Find in files..." class="w-full bg-studio-card border border-studio-border rounded px-2.5 py-1.5 text-xs text-studio-text focus:outline-none focus:border-studio-accent" />
+                </div>
+                <div id="search-results" class="space-y-2 text-xs"></div>
+            </div>
+
+            <!-- Tab Content Pane: Snippets -->
+            <div id="tab-snippets" class="flex-1 overflow-y-auto p-3 hidden space-y-2">
+                <p class="text-xs text-studio-muted mb-2">Click to insert standard boilerplate into active file:</p>
+                <button onclick="insertSnippet('html')" class="w-full text-left p-2 rounded bg-studio-card hover:bg-studio-active text-xs transition">
+                    <div class="font-medium text-studio-text">HTML5 Boilerplate</div>
+                    <div class="text-[10px] text-studio-muted">Basic template with modern meta tags</div>
+                </button>
+                <button onclick="insertSnippet('fetch')" class="w-full text-left p-2 rounded bg-studio-card hover:bg-studio-active text-xs transition">
+                    <div class="font-medium text-studio-text">JavaScript Fetch API</div>
+                    <div class="text-[10px] text-studio-muted">Async fetch helper with error handling</div>
+                </button>
+                <button onclick="insertSnippet('flexbox')" class="w-full text-left p-2 rounded bg-studio-card hover:bg-studio-active text-xs transition">
+                    <div class="font-medium text-studio-text">CSS Flex Center</div>
+                    <div class="text-[10px] text-studio-muted">Centered flex layout styles</div>
+                </button>
+                <button onclick="insertSnippet('python')" class="w-full text-left p-2 rounded bg-studio-card hover:bg-studio-active text-xs transition">
+                    <div class="font-medium text-studio-text">Python Script Template</div>
+                    <div class="text-[10px] text-studio-muted">Starter script with functions</div>
+                </button>
+            </div>
+
+            <!-- Tab Content Pane: Settings -->
+            <div id="tab-settings" class="flex-1 overflow-y-auto p-3 hidden space-y-4 text-xs">
+                <div>
+                    <label class="text-studio-muted block mb-1">Editor Font Size</label>
+                    <input type="number" id="setting-fontsize" value="14" min="10" max="24" onchange="updateSettings()" class="w-full bg-studio-card border border-studio-border rounded px-2 py-1 text-studio-text" />
+                </div>
+                <div>
+                    <label class="text-studio-muted block mb-1">Auto-Run Code Mode</label>
+                    <select id="setting-autorun" onchange="updateSettings()" class="w-full bg-studio-card border border-studio-border rounded px-2 py-1 text-studio-text">
+                        <option value="manual">Manual (Click Run)</option>
+                        <option value="auto">Live Update on Typing</option>
+                    </select>
+                </div>
+                <div class="pt-2 border-t border-studio-border">
+                    <button onclick="resetWorkspace()" class="w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 py-1.5 rounded transition">Reset Entire Workspace</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center / Right Editor & Execution Split Container -->
+        <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative" id="main-split-container">
+            
+            <!-- Left Pane: Code Editor Engine -->
+            <div class="flex-1 flex flex-col min-w-[200px] h-full" id="editor-pane">
+                <!-- Editor Open File Tabs -->
+                <div class="h-9 bg-studio-sidebar border-b border-studio-border flex items-center overflow-x-auto shrink-0" id="editor-tabs">
+                    <!-- Tabs rendered dynamically -->
+                </div>
+                <!-- CodeMirror container -->
+                <div class="flex-1 relative bg-studio-bg" id="codemirror-wrapper">
+                    <textarea id="code-editor"></textarea>
+                </div>
+            </div>
+
+            <!-- Draggable Vertical Splitter -->
+            <div class="gutter-drag-x bg-studio-border hidden md:block" id="gutter-x"></div>
+
+            <!-- Right Pane: Live Preview & Interactive Console/Terminal -->
+            <div class="flex-1 flex flex-col min-w-[200px] h-full" id="preview-pane">
+                
+                <!-- Live Preview Display Container -->
+                <div class="flex-1 flex flex-col relative bg-white" id="preview-subpane">
+                    <div class="h-8 bg-studio-sidebar border-b border-studio-border px-3 flex items-center justify-between text-xs text-studio-muted">
+                        <span class="flex items-center space-x-1.5"><i data-lucide="eye" class="w-3.5 h-3.5"></i> <span>Live Preview</span></span>
+                        <button onclick="refreshPreview()" class="hover:text-studio-text p-1"><i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i></button>
+                    </div>
+                    <iframe id="preview-frame" class="w-full flex-1 border-0 bg-white" sandbox="allow-scripts allow-modals"></iframe>
+                </div>
+
+                <!-- Horizontal Splitter between Live Preview & Terminal Console -->
+                <div class="gutter-drag-y bg-studio-border" id="gutter-y"></div>
+
+                <!-- Interactive Terminal / Console Output Container -->
+                <div class="h-48 flex flex-col bg-studio-sidebar border-t border-studio-border" id="terminal-subpane">
+                    <!-- Console Header & Mode Switcher -->
+                    <div class="h-8 px-3 border-b border-studio-border flex items-center justify-between text-xs text-studio-muted bg-studio-sidebar">
+                        <div class="flex items-center space-x-3">
+                            <button onclick="switchTerminalTab('console')" id="term-btn-console" class="text-studio-accent font-semibold flex items-center space-x-1">
+                                <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+                                <span>Console Logs</span>
+                            </button>
+                            <button onclick="switchTerminalTab('cli')" id="term-btn-cli" class="hover:text-studio-text flex items-center space-x-1">
+                                <i data-lucide="square-terminal" class="w-3.5 h-3.5"></i>
+                                <span>Terminal CLI</span>
+                            </button>
+                        </div>
+                        <button onclick="clearConsole()" class="hover:text-studio-text"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                    </div>
+
+                    <!-- Console Logs View -->
+                    <div id="terminal-console-view" class="flex-1 overflow-y-auto p-2 font-mono text-xs space-y-1 bg-studio-bg">
+                        <div class="text-studio-muted italic">Console outputs and errors will appear here...</div>
+                    </div>
+
+                    <!-- Interactive CLI Prompt View -->
+                    <div id="terminal-cli-view" class="flex-1 overflow-y-auto p-2 font-mono text-xs bg-studio-bg hidden flex flex-col">
+                        <div id="cli-output" class="space-y-1 mb-2">
+                            <div class="text-emerald-400">WebStudio Terminal CLI Ready. Type 'help' for available commands.</div>
+                        </div>
+                        <div class="flex items-center space-x-2 text-studio-text mt-auto">
+                            <span class="text-studio-accent font-bold">$</span>
+                            <input type="text" id="cli-input" onkeydown="handleCliInput(event)" class="flex-1 bg-transparent border-0 focus:outline-none text-studio-text" placeholder="type command..." />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Bottom App Status Bar -->
+    <footer class="h-6 bg-studio-sidebar border-t border-studio-border flex items-center justify-between px-3 text-[11px] text-studio-muted z-10 shrink-0">
+        <div class="flex items-center space-x-4">
+            <span class="flex items-center space-x-1" id="status-file">
+                <i data-lucide="file" class="w-3 h-3"></i>
+                <span id="status-filename">index.html</span>
+            </span>
+            <span id="status-cursor">Ln 1, Col 1</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span id="status-pyodide" class="flex items-center space-x-1">
+                <span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span>
+                <span>Pyodide Idle</span>
+            </span>
+            <span id="status-mode" class="uppercase font-semibold text-studio-accent">HTML</span>
+            <span>UTF-8</span>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Virtual File System Default Setup
+        const DEFAULT_FILES = {
+            'index.html': {
+                name: 'index.html',
+                language: 'htmlmixed',
+                content: `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>App Demo</title>\n  <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n  <div class="card">\n    <h1>Hello WebStudio! 👋</h1>\n    <p>Edit HTML, CSS, JavaScript, or run Python code inside browser!</p>\n    <button id="btn">Click Me!</button>\n    <p id="output"></p>\n  </div>\n  <script src="app.js"><\/script>\n</body>\n</html>`
+            },
+            'styles.css': {
+                name: 'styles.css',
+                language: 'css',
+                content: `body {\n  font-family: system-ui, sans-serif;\n  background: #0f172a;\n  color: #f8fafc;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 100vh;\n  margin: 0;\n}\n.card {\n  background: #1e293b;\n  padding: 2rem;\n  border-radius: 12px;\n  box-shadow: 0 10px 25px rgba(0,0,0,0.3);\n  text-align: center;\n}\nbutton {\n  background: #38bdf8;\n  color: #0f172a;\n  border: none;\n  padding: 0.5rem 1rem;\n  font-weight: bold;\n  border-radius: 6px;\n  cursor: pointer;\n}`
+            },
+            'app.js': {
+                name: 'app.js',
+                language: 'javascript',
+                content: `// Interactive JavaScript logic\ndocument.getElementById('btn').addEventListener('click', () => {\n  console.log('Button clicked at: ' + new Date().toLocaleTimeString());\n  document.getElementById('output').innerText = 'Interactive JS Running Perfectly!';\n});`
+            },
+            'main.py': {
+                name: 'main.py',
+                language: 'python',
+                content: `# Browser Python execution via WebAssembly Pyodide\nimport sys\n\ndef calculate_fibonacci(n):\n    a, b = 0, 1\n    results = []\n    for _ in range(n):\n        results.append(a)\n        a, b = b, a + b\n    return results\n\nprint("Python Version:", sys.version)\nprint("Fibonacci Sequence (first 10):", calculate_fibonacci(10))`
+            }
+        };
+
+        // App State Variables
+        let files = {};
+        let activeFile = 'index.html';
+        let openTabs = ['index.html', 'styles.css', 'app.js', 'main.py'];
+        let editor = null;
+        let pyodideInstance = null;
+        let isPyodideLoading = false;
+        let autoRunTimer = null;
+        let settings = { fontSize: 14, autoRun: 'manual', theme: 'dark' };
+
+        // Initialize Application
+        window.addEventListener('DOMContentLoaded', async () => {
+            lucide.createIcons();
+            loadWorkspaceFromStorage();
+            initCodeMirror();
+            renderFileTree();
+            renderTabs();
+            setupSplitResizers();
+            runProject();
+            initPyodide();
+        });
+
+        // Initialize CodeMirror Editor Instance
+        function initCodeMirror() {
+            editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+                lineNumbers: true,
+                theme: 'dracula',
+                mode: 'htmlmixed',
+                autoCloseBrackets: true,
+                styleActiveLine: true,
+                tabSize: 2,
+                indentWithTabs: false
+            });
+
+            // Set Content for Active File
+            if (files[activeFile]) {
+                editor.setValue(files[activeFile].content);
+                setEditorMode(files[activeFile].name);
+            }
+
+            // Sync Editor Content to Storage State
+            editor.on('change', () => {
+                if (files[activeFile]) {
+                    files[activeFile].content = editor.getValue();
+                    if (settings.autoRun === 'auto') {
+                        clearTimeout(autoRunTimer);
+                        autoRunTimer = setTimeout(runProject, 800);
+                    }
+                }
+            });
+
+            // Update Status Line and Column Numbers
+            editor.on('cursorActivity', () => {
+                const pos = editor.getCursor();
+                document.getElementById('status-cursor').innerText = `Ln ${pos.line + 1}, Col ${pos.ch + 1}`;
+            });
+        }
+
+        // Set Language Mode based on Extension
+        function setEditorMode(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            let mode = 'javascript';
+            if (ext === 'html' || ext === 'htm') mode = 'htmlmixed';
+            else if (ext === 'css') mode = 'css';
+            else if (ext === 'py') mode = 'python';
+            else if (ext === 'json') mode = 'javascript';
+
+            editor.setOption('mode', mode);
+            document.getElementById('status-mode').innerText = ext.toUpperCase();
+        }
+
+        // File Explorer Tree Rendering
+        function renderFileTree() {
+            const treeEl = document.getElementById('file-tree');
+            treeEl.innerHTML = '';
+
+            Object.keys(files).forEach(filename => {
+                const isSelected = filename === activeFile;
+                const fileItem = document.createElement('div');
+                fileItem.className = `flex items-center justify-between px-2 py-1.5 rounded cursor-pointer text-xs group ${isSelected ? 'bg-studio-active text-studio-accent font-medium' : 'hover:bg-studio-card text-studio-text'}`;
+                
+                // Determine icon
+                let iconName = 'file-text';
+                if (filename.endsWith('.html')) iconName = 'code-2';
+                if (filename.endsWith('.css')) iconName = 'palette';
+                if (filename.endsWith('.js')) iconName = 'file-json';
+                if (filename.endsWith('.py')) iconName = 'terminal';
+
+                fileItem.innerHTML = `
+                    <div class="flex items-center space-x-2 truncate" onclick="openFile('${filename}')">
+                        <i data-lucide="${iconName}" class="w-3.5 h-3.5 shrink-0"></i>
+                        <span class="truncate">${filename}</span>
+                    </div>
+                    <div class="hidden group-hover:flex items-center space-x-1">
+                        <button onclick="renameFile('${filename}', event)" class="p-0.5 hover:text-studio-accent" title="Rename"><i data-lucide="edit-2" class="w-3 h-3"></i></button>
+                        <button onclick="deleteFile('${filename}', event)" class="p-0.5 hover:text-red-400" title="Delete"><i data-lucide="trash" class="w-3 h-3"></i></button>
+                    </div>
+                `;
+                treeEl.appendChild(fileItem);
+            });
+            lucide.createIcons();
+        }
+
+        // Render Active Open Editor Tabs
+        function renderTabs() {
+            const tabsContainer = document.getElementById('editor-tabs');
+            tabsContainer.innerHTML = '';
+
+            openTabs.forEach(filename => {
+                const isActive = filename === activeFile;
+                const tab = document.createElement('div');
+                tab.className = `h-full px-3 border-r border-studio-border flex items-center space-x-2 text-xs cursor-pointer shrink-0 ${isActive ? 'bg-studio-bg text-studio-accent border-t-2 border-t-studio-accent font-medium' : 'bg-studio-sidebar text-studio-muted hover:bg-studio-card'}`;
+                
+                tab.innerHTML = `
+                    <span onclick="openFile('${filename}')">${filename}</span>
+                    <button onclick="closeTab('${filename}', event)" class="hover:text-red-400 p-0.5 rounded"><i data-lucide="x" class="w-3 h-3"></i></button>
+                `;
+                tabsContainer.appendChild(tab);
+            });
+            lucide.createIcons();
+        }
+
+        // Open Selected File
+        function openFile(filename) {
+            if (!files[filename]) return;
+            if (!openTabs.includes(filename)) openTabs.push(filename);
+            
+            activeFile = filename;
+            editor.setValue(files[filename].content);
+            setEditorMode(filename);
+            
+            document.getElementById('status-filename').innerText = filename;
+            renderFileTree();
+            renderTabs();
+        }
+
+        // Close Open Editor Tab
+        function closeTab(filename, event) {
+            event.stopPropagation();
+            openTabs = openTabs.filter(t => t !== filename);
+            if (activeFile === filename) {
+                activeFile = openTabs.length > 0 ? openTabs[openTabs.length - 1] : '';
+                if (activeFile) openFile(activeFile);
+                else editor.setValue('');
+            }
+            renderTabs();
+        }
+
+        // Create New File Dialog
+        function createNewFilePrompt() {
+            const name = prompt('Enter new filename (e.g., index.js, script.py):');
+            if (!name) return;
+            if (files[name]) return alert('File already exists!');
+
+            const ext = name.split('.').pop();
+            files[name] = {
+                name: name,
+                language: ext,
+                content: ''
+            };
+            openFile(name);
+        }
+
+        // Rename Existing File
+        function renameFile(oldName, event) {
+            event.stopPropagation();
+            const newName = prompt('Enter new filename:', oldName);
+            if (!newName || newName === oldName) return;
+            
+            files[newName] = { ...files[oldName], name: newName };
+            delete files[oldName];
+
+            openTabs = openTabs.map(t => t === oldName ? newName : t);
+            if (activeFile === oldName) activeFile = newName;
+
+            renderFileTree();
+            renderTabs();
+        }
+
+        // Delete File
+        function deleteFile(filename, event) {
+            event.stopPropagation();
+            if (Object.keys(files).length <= 1) return alert('You must keep at least one file in project.');
+            if (!confirm(`Are you sure you want to delete ${filename}?`)) return;
+
+            delete files[filename];
+            closeTab(filename, event);
+            renderFileTree();
+        }
+
+        // Main Execution Engine - HTML/JS/CSS Sandbox & Python Interpreter
+        async function runProject() {
+            if (activeFile.endsWith('.py')) {
+                runPythonScript(files[activeFile].content);
+                return;
+            }
+
+            const previewFrame = document.getElementById('preview-frame');
+            
+            let html = files['index.html'] ? files['index.html'].content : '';
+            let css = files['styles.css'] ? files['styles.css'].content : '';
+            let js = files['app.js'] ? files['app.js'].content : '';
+
+            // Injection script to capture console outputs & errors inside <iframe>
+            const consoleCaptureScript = `
+                <script>
+                    (function() {
+                        function sendToParent(type, args) {
+                            window.parent.postMessage({
+                                source: 'studio-console',
+                                type: type,
+                                message: Array.from(args).map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' ')
+                            }, '*');
+                        }
+                        const origLog = console.log;
+                        const origErr = console.error;
+                        const origWarn = console.warn;
+
+                        console.log = function() { sendToParent('log', arguments); origLog.apply(console, arguments); };
+                        console.error = function() { sendToParent('error', arguments); origErr.apply(console, arguments); };
+                        console.warn = function() { sendToParent('warn', arguments); origWarn.apply(console, arguments); };
+
+                        window.onerror = function(msg, url, line) {
+                            sendToParent('error', ['Uncaught Error: ' + msg + ' (Line ' + line + ')']);
+                        };
+                    })();
+                <\/script>
+            `;
+
+            // Combine HTML + inline CSS + JS
+            const documentContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>${css}</style>
+                    ${consoleCaptureScript}
+                </head>
+                <body>
+                    ${html}
+                    <script>${js}<\/script>
+                </body>
+                </html>
+            `;
+
+            previewFrame.srcdoc = documentContent;
+        }
+
+        // Handle Console Logging Messages from IFrame
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.source === 'studio-console') {
+                appendConsoleLog(event.data.message, event.data.type);
+            }
+        });
+
+        // Print output log entry to console pane
+        function appendConsoleLog(message, type = 'log') {
+            const consoleView = document.getElementById('terminal-console-view');
+            const entry = document.createElement('div');
+            
+            let textColor = 'text-studio-text';
+            if (type === 'error') textColor = 'text-red-400 bg-red-950/30 p-1 rounded border-l-2 border-red-500';
+            if (type === 'warn') textColor = 'text-amber-400';
+            if (type === 'info') textColor = 'text-studio-accent';
+
+            entry.className = `font-mono text-xs ${textColor} break-all`;
+            entry.innerText = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleView.appendChild(entry);
+            consoleView.scrollTop = consoleView.scrollHeight;
+        }
+
+        // Clear Console Outputs
+        function clearConsole() {
+            document.getElementById('terminal-console-view').innerHTML = '';
+        }
+
+        // Initialize Browser Python Runtime using Pyodide WebAssembly
+        async function initPyodide() {
+            const pyStatus = document.getElementById('status-pyodide');
+            try {
+                isPyodideLoading = true;
+                pyStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse inline-block"></span><span>Loading Pyodide...</span>`;
+                pyodideInstance = await loadPyodide();
+                pyStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span><span>Python Ready</span>`;
+            } catch (err) {
+                pyStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500 inline-block"></span><span>Pyodide Offline</span>`;
+            } finally {
+                isPyodideLoading = false;
+            }
+        }
+
+        // Execute Python Script
+        async function runPythonScript(code) {
+            if (!pyodideInstance) {
+                appendConsoleLog('Pyodide engine is still loading. Please wait...', 'warn');
+                return;
+            }
+            
+            appendConsoleLog('--- Executing Python Script ---', 'info');
+            try {
+                // Redirect standard output to studio console
+                pyodideInstance.setStdout({
+                    batched: (str) => appendConsoleLog(str, 'log')
+                });
+                pyodideInstance.setStderr({
+                    batched: (str) => appendConsoleLog(str, 'error')
+                });
+
+                await pyodideInstance.runPythonAsync(code);
+            } catch (err) {
+                appendConsoleLog(err.message, 'error');
+            }
+        }
+
+        // Interactive Terminal CLI Commands Processor
+        function handleCliInput(e) {
+            if (e.key === 'Enter') {
+                const inputEl = document.getElementById('cli-input');
+                const command = inputEl.value.trim();
+                if (!command) return;
+
+                const cliOutput = document.getElementById('cli-output');
+                const cmdLine = document.createElement('div');
+                cmdLine.innerHTML = `<span class="text-studio-accent font-bold">$</span> <span>${command}</span>`;
+                cliOutput.appendChild(cmdLine);
+
+                const parts = command.split(' ');
+                const cmd = parts[0].toLowerCase();
+
+                switch (cmd) {
+                    case 'help':
+                        printCli('Available commands: ls, cat <file>, clear, run, theme <dark/light>, help');
+                        break;
+                    case 'ls':
+                        printCli(Object.keys(files).join('  '));
+                        break;
+                    case 'cat':
+                        if (parts[1] && files[parts[1]]) printCli(files[parts[1]].content);
+                        else printCli('File not found', 'text-red-400');
+                        break;
+                    case 'clear':
+                        cliOutput.innerHTML = '';
+                        break;
+                    case 'run':
+                        runProject();
+                        printCli('Project execution triggered.');
+                        break;
+                    case 'theme':
+                        if (parts[1] === 'light' || parts[1] === 'dark') toggleTheme(parts[1]);
+                        break;
+                    default:
+                        printCli(`Command not recognized: ${cmd}. Type 'help'.`, 'text-red-400');
+                }
+
+                inputEl.value = '';
+                document.getElementById('terminal-cli-view').scrollTop = document.getElementById('terminal-cli-view').scrollHeight;
+            }
+        }
+
+        function printCli(text, className = 'text-studio-muted') {
+            const cliOutput = document.getElementById('cli-output');
+            const res = document.createElement('div');
+            res.className = className;
+            res.innerText = text;
+            cliOutput.appendChild(res);
+        }
+
+        // Format Active Code File using Beautifier Library
+        function formatActiveFile() {
+            if (!files[activeFile]) return;
+            const content = editor.getValue();
+            let formatted = content;
+
+            if (activeFile.endsWith('.html')) formatted = html_beautify(content, { indent_size: 2 });
+            else if (activeFile.endsWith('.css')) formatted = css_beautify(content, { indent_size: 2 });
+            else if (activeFile.endsWith('.js')) formatted = js_beautify(content, { indent_size: 2 });
+
+            editor.setValue(formatted);
+        }
+
+        // Insert Template Code Snippets
+        function insertSnippet(type) {
+            if (!editor) return;
+            let code = '';
+            if (type === 'html') code = `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>Document</title>\n</head>\n<body>\n  \n</body>\n</html>`;
+            if (type === 'fetch') code = `async function fetchData(url) {\n  try {\n    const res = await fetch(url);\n    const data = await res.json();\n    return data;\n  } catch (err) {\n    console.error('Fetch error:', err);\n  }\n}`;
+            if (type === 'flexbox') code = `.centered-container {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: 100vh;\n}`;
+            if (type === 'python') code = `def main():\n    print("Hello from Python Snippet!")\n\nif __name__ == "__main__":\n    main()`;
+
+            editor.replaceSelection(code);
+        }
+
+        // Local Storage Sync Features
+        function saveWorkspace() {
+            localStorage.setItem('webstudio_files', JSON.stringify(files));
+            localStorage.setItem('webstudio_project_title', document.getElementById('project-title').value);
+            alert('Workspace project successfully saved to local browser storage!');
+        }
+
+        function loadWorkspaceFromStorage() {
+            const savedFiles = localStorage.getItem('webstudio_files');
+            const savedTitle = localStorage.getItem('webstudio_project_title');
+
+            if (savedFiles) {
+                try { files = JSON.parse(savedFiles); } catch(e) { files = DEFAULT_FILES; }
+            } else {
+                files = DEFAULT_FILES;
+            }
+
+            if (savedTitle) {
+                document.getElementById('project-title').value = savedTitle;
+            }
+        }
+
+        function resetWorkspace() {
+            if (confirm('Are you sure you want to reset workspace? All unsaved edits will be lost.')) {
+                localStorage.removeItem('webstudio_files');
+                files = DEFAULT_FILES;
+                openTabs = Object.keys(files);
+                activeFile = 'index.html';
+                openFile('index.html');
+                renderFileTree();
+            }
+        }
+
+        // Zip Archive Project Export via JSZip
+        function exportProjectZip() {
+            const zip = new JSZip();
+            Object.keys(files).forEach(filename => {
+                zip.file(filename, files[filename].content);
+            });
+
+            zip.generateAsync({ type: 'blob' }).then((content) => {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(content);
+                a.download = `${document.getElementById('project-title').value.toLowerCase().replace(/\s+/g, '_')}.zip`;
+                a.click();
+            });
+        }
+
+        // Import Local Files
+        function importFiles(event) {
+            const imported = event.target.files;
+            if (!imported || imported.length === 0) return;
+
+            Array.from(imported).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    files[file.name] = {
+                        name: file.name,
+                        language: file.name.split('.').pop(),
+                        content: e.target.result
+                    };
+                    renderFileTree();
+                    openFile(file.name);
+                };
+                reader.readAsText(file);
+            });
+        }
+
+        // UI Panel Navigation & Tab Switcher
+        function switchSidebarTab(tabName) {
+            ['explorer', 'search', 'snippets', 'settings'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`nav-btn-${t}`).classList.remove('text-studio-accent');
+            });
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            document.getElementById(`nav-btn-${tabName}`).classList.add('text-studio-accent');
+            document.getElementById('sidebar-title').innerText = tabName.toUpperCase();
+        }
+
+        function switchTerminalTab(tabName) {
+            if (tabName === 'console') {
+                document.getElementById('terminal-console-view').classList.remove('hidden');
+                document.getElementById('terminal-cli-view').classList.add('hidden');
+                document.getElementById('term-btn-console').classList.add('text-studio-accent');
+                document.getElementById('term-btn-cli').classList.remove('text-studio-accent');
+            } else {
+                document.getElementById('terminal-console-view').classList.add('hidden');
+                document.getElementById('terminal-cli-view').classList.remove('hidden');
+                document.getElementById('term-btn-cli').classList.add('text-studio-accent');
+                document.getElementById('term-btn-console').classList.remove('text-studio-accent');
+            }
+        }
+
+        // Search Engine across Files
+        function performSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const resultsEl = document.getElementById('search-results');
+            resultsEl.innerHTML = '';
+            if (!query) return;
+
+            Object.keys(files).forEach(filename => {
+                const lines = files[filename].content.split('\n');
+                lines.forEach((line, index) => {
+                    if (line.toLowerCase().includes(query)) {
+                        const item = document.createElement('div');
+                        item.className = 'p-1.5 rounded bg-studio-card cursor-pointer hover:bg-studio-active';
+                        item.onclick = () => {
+                            openFile(filename);
+                            editor.setCursor(index, 0);
+                        };
+                        item.innerHTML = `<span class="text-studio-accent">${filename}</span> <span class="text-studio-muted">(Line ${index + 1})</span>: <div class="truncate font-mono">${line.trim()}</div>`;
+                        resultsEl.appendChild(item);
+                    }
+                });
+            });
+        }
+
+        // Theme Switcher (Dark Mode / Light Mode)
+        function toggleTheme(explicitTheme = null) {
+            const html = document.documentElement;
+            const currentTheme = explicitTheme || (html.classList.contains('dark') ? 'light' : 'dark');
+            
+            if (currentTheme === 'light') {
+                html.classList.remove('dark');
+                editor.setOption('theme', 'eclipse');
+                document.getElementById('theme-icon').setAttribute('data-lucide', 'moon');
+            } else {
+                html.classList.add('dark');
+                editor.setOption('theme', 'dracula');
+                document.getElementById('theme-icon').setAttribute('data-lucide', 'sun');
+            }
+            lucide.createIcons();
+        }
+
+        // Resizable Panes Logic via Mouse Dragging
+        function setupSplitResizers() {
+            const gutterX = document.getElementById('gutter-x');
+            const editorPane = document.getElementById('editor-pane');
+            const previewPane = document.getElementById('preview-pane');
+
+            let isDraggingX = false;
+
+            gutterX.addEventListener('mousedown', () => { isDraggingX = true; gutterX.classList.add('active'); });
+            window.addEventListener('mouseup', () => { isDraggingX = false; gutterX.classList.remove('active'); });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDraggingX) return;
+                const containerWidth = document.getElementById('main-split-container').offsetWidth;
+                const newEditorWidth = (e.clientX - 300) / containerWidth * 100;
+                if (newEditorWidth > 20 && newEditorWidth < 80) {
+                    editorPane.style.width = `${newEditorWidth}%`;
+                    previewPane.style.width = `${100 - newEditorWidth}%`;
+                }
+            });
+
+            // Y-axis splitter between preview and terminal
+            const gutterY = document.getElementById('gutter-y');
+            const previewSubpane = document.getElementById('preview-subpane');
+            const terminalSubpane = document.getElementById('terminal-subpane');
+            let isDraggingY = false;
+
+            gutterY.addEventListener('mousedown', () => { isDraggingY = true; gutterY.classList.add('active'); });
+            window.addEventListener('mouseup', () => { isDraggingY = false; gutterY.classList.remove('active'); });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDraggingY) return;
+                const previewHeight = previewPane.offsetHeight;
+                const relativeY = e.clientY - previewPane.getBoundingClientRect().top;
+                const newTerminalHeight = previewHeight - relativeY;
+                if (newTerminalHeight > 80 && newTerminalHeight < previewHeight - 80) {
+                    terminalSubpane.style.height = `${newTerminalHeight}px`;
+                }
+            });
+        }
+
+        // Keyboard Shortcuts Handler
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                saveWorkspace();
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                runProject();
+            }
+        });
+    </script>
+</body>
+</html>

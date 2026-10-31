@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact — DEXO3</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;background:#080D19;color:#F7F9FC;line-height:1.6}
+    a{color:inherit;text-decoration:none}
+    header{padding:20px 6%;border-bottom:1px solid #ffffff18;display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px}
+    .logo{font-size:24px;font-weight:bold;color:#60B5FF}
+    nav{display:flex;gap:20px;flex-wrap:wrap}
+    nav a{color:#9BA9BC;font-size:14px}
+    main{width:min(650px,90%);margin:auto}
+    .hero{text-align:center;padding:65px 0 30px}
+    h1{font-size:clamp(38px,7vw,58px)}
+    .blue{color:#1683FF}
+    .muted{color:#9BA9BC}
+    form{background:#101827;border:1px solid #ffffff18;border-radius:20px;padding:28px;margin-bottom:60px}
+    label{display:block;margin:15px 0 7px}
+    input,textarea{width:100%;padding:13px;border-radius:10px;border:1px solid #ffffff25;background:#080D19;color:white;font:inherit}
+    textarea{min-height:140px;resize:vertical}
+    button{margin-top:20px;padding:13px 22px;border:0;border-radius:10px;background:#1683FF;color:white;font-weight:bold;cursor:pointer}
+    footer{text-align:center;border-top:1px solid #ffffff18;padding:30px;color:#9BA9BC}
+  </style>
+</head>
+<body>
+<header>
+  <a class="logo" href="../index.html">DEXO3</a>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="products.html">Products</a>
+    <a href="faq.html">FAQ</a>
+  </nav>
+</header>
+<main>
+  <section class="hero">
+    <p class="blue">WE WOULD LIKE TO HEAR FROM YOU</p>
+    <h1>Contact <span class="blue">DEXO3</span></h1>
+    <p class="muted">Questions, feedback or ideas? Send us a message.</p>
+  </section>
+
+  <form id="contactForm">
+    <h2>Send a message</h2>
+    <p class="muted">This demonstration form does not submit or store messages.</p>
+
+    <label for="name">Your name</label>
+    <input id="name" name="name" type="text" maxlength="100" required>
+
+    <label for="email">Email address</label>
+    <input id="email" name="email" type="email" maxlength="254" required>
+
+    <label for="subject">Subject</label>
+    <input id="subject" name="subject" type="text" maxlength="150" required>
+
+    <label for="message">Message</label>
+    <textarea id="message" name="message" maxlength="3000" required></textarea>
+
+    <button type="submit">Preview message</button>
+    <p id="formStatus" class="muted" role="status" aria-live="polite"></p>
+  </form>
+</main>
+<footer>© <span id="year"></span> DEXO3. All Simplified.</footer>
+<script>
+  document.getElementById("year").textContent=new Date().getFullYear();
+  document.getElementById("contactForm").addEventListener("submit",function(event){
+    event.preventDefault();
+    const name=document.getElementById("name").value.trim();
+    const email=document.getElementById("email").value.trim();
+    const subject=document.getElementById("subject").value.trim();
+    const message=document.getElementById("message").value.trim();
+    if(!name||!email||!subject||!message)return;
+    document.getElementById("formStatus").textContent=
+      "Your message is ready for preview. No message has been sent or stored.";
+  });
+</script>
+</body>
+</html>

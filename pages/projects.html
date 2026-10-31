@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects — DEXO3</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;background:#080D19;color:#F7F9FC;line-height:1.7}
+    a{color:inherit;text-decoration:none}
+    header{padding:20px 6%;border-bottom:1px solid #ffffff18;display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px}
+    .logo{font-size:24px;font-weight:bold;color:#60B5FF}
+    nav{display:flex;gap:20px;flex-wrap:wrap}
+    nav a{color:#9BA9BC;font-size:14px}
+    main{width:min(1050px,88%);margin:auto}
+    .hero{text-align:center;padding:90px 0 50px}
+    h1{font-size:clamp(40px,7vw,65px)}
+    .blue{color:#1683FF}
+    .muted{color:#9BA9BC}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;padding-bottom:70px}
+    .card{background:#101827;border:1px solid #ffffff15;border-radius:18px;padding:25px}
+    .card h2{margin-bottom:8px}
+    .card p{color:#9BA9BC}
+    .status{display:inline-block;margin-top:18px;padding:5px 10px;border-radius:20px;background:#1683FF20;color:#60B5FF;font-size:12px}
+    footer{text-align:center;border-top:1px solid #ffffff18;padding:30px;color:#9BA9BC}
+    @media(max-width:600px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header>
+  <a class="logo" href="../index.html">DEXO3</a>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="products.html">Products</a>
+    <a href="services.html">Services</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+<main>
+  <section class="hero">
+    <p class="blue">MADE WITH CREATIVITY</p>
+    <h1>Our <span class="blue">Projects</span></h1>
+    <p class="muted">A collection of digital ideas, experiments and independent projects.</p>
+  </section>
+  <section class="grid">
+    <article class="card"><h2>DEXO Education</h2><p>A learning-focused collection of resources and student utilities.</p><span class="status">In development</span></article>
+    <article class="card"><h2>DEXO Creative Studio</h2><p>A creative space for design resources and digital production.</p><span class="status">Planned</span></article>
+    <article class="card"><h2>DEXO AI</h2><p>An idea for accessible AI-powered digital assistance.</p><span class="status">Planned</span></article>
+    <article class="card"><h2>DEXO Cloud</h2><p>A future cloud platform concept for data and backend services.</p><span class="status">Planned</span></article>
+    <article class="card"><h2>DEXO Utilities</h2><p>A collection of practical tools for everyday digital tasks.</p><span class="status">In development</span></article>
+    <article class="card"><h2>Independent Projects</h2><p>More experiments and standalone projects may be added here.</p><span class="status">Growing collection</span></article>
+  </section>
+</main>
+<footer>© <span id="year"></span> DEXO3. All Simplified.</footer>
+<script>document.getElementById("year").textContent=new Date().getFullYear();</script>
+</body>
+</html>

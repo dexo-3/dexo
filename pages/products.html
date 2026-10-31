@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Products — DEXO3</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;background:#080D19;color:#F7F9FC;line-height:1.7}
+    a{color:inherit;text-decoration:none}
+    header{padding:20px 6%;border-bottom:1px solid #ffffff18;display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px}
+    .logo{font-size:24px;font-weight:bold;color:#60B5FF}
+    nav{display:flex;gap:20px;flex-wrap:wrap}
+    nav a{color:#9BA9BC;font-size:14px}
+    main{width:min(1100px,88%);margin:auto}
+    .hero{text-align:center;padding:85px 0 45px}
+    h1{font-size:clamp(40px,7vw,65px)}
+    h2{margin-bottom:10px}
+    .blue{color:#1683FF}
+    .muted{color:#9BA9BC}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;padding-bottom:70px}
+    .card{background:#101827;border:1px solid #ffffff15;border-radius:18px;padding:27px}
+    .card p{color:#9BA9BC}
+    .card a{display:inline-block;margin-top:15px;color:#60B5FF}
+    footer{text-align:center;border-top:1px solid #ffffff18;padding:30px;color:#9BA9BC}
+    @media(max-width:600px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header>
+  <a class="logo" href="../index.html">DEXO3</a>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+    <a href="projects.html">Projects</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+<main>
+  <section class="hero">
+    <p class="blue">THE DEXO3 ECOSYSTEM</p>
+    <h1>Our <span class="blue">Products</span></h1>
+    <p class="muted">Explore the digital products planned under one connected identity.</p>
+  </section>
+  <section class="grid">
+    <article class="card"><h2>DEXO Education</h2><p>Study resources, subject materials, MCQ practice and GPA tools.</p><a href="../education/index.html">Open Education →</a></article>
+    <article class="card"><h2>DEXO Creative Studio</h2><p>Design inspiration, creative resources, templates and workflows.</p><a href="../creative/index.html">Open Creative Studio →</a></article>
+    <article class="card"><h2>DEXO AI</h2><p>Planned AI assistance for learning, writing and brainstorming.</p><a href="../ai/index.html">Open DEXO AI →</a></article>
+    <article class="card"><h2>DEXO Cloud</h2><p>A planned platform for storage, database and backend capabilities.</p><a href="../cloud/index.html">Open DEXO Cloud →</a></article>
+    <article class="card"><h2>DEXO Utilities</h2><p>Calculators, converters, weather information and text tools.</p><a href="../tools/index.html">Open Utilities →</a></article>
+    <article class="card"><h2>DEXO Projects</h2><p>Independent projects and experiments connected to DEXO3.</p><a href="projects.html">View Projects →</a></article>
+  </section>
+  <p class="muted">Some product pages are planned and may not be available yet.</p>
+</main>
+<footer>© <span id="year"></span> DEXO3. All Simplified.</footer>
+<script>document.getElementById("year").textContent=new Date().getFullYear();</script>
+</body>
+</html>

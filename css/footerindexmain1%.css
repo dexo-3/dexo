@@ -1,0 +1,140 @@
+
+/* ================================
+   DEXO3 PREMIUM FOOTER
+================================ */
+
+.dexo-footer {
+  position: relative;
+  width: 100%;
+  margin-top: 100px;
+  background: #08090c;
+  color: #fff;
+  border-top: 1px solid rgba(255,255,255,0.09);
+  overflow: hidden;
+}
+
+/* Subtle blue ambient glow */
+
+.dexo-footer::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 200px;
+  background: rgba(0, 115, 255, 0.12);
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.footer-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: auto;
+  padding: 45px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Brand */
+
+.footer-brand-section .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 750;
+  letter-spacing: -1px;
+}
+
+.footer-brand-section .brand > span:last-child > span {
+  color: #438dff;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: white;
+  font-size: 21px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #1677ff, #0044c7);
+  box-shadow: 0 4px 20px rgba(0, 100, 255, 0.25);
+}
+
+/* Copyright */
+
+.footer-brand-section p {
+  margin: 14px 0 0;
+  color: #777e8b;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+}
+
+/* Navigation */
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.footer-links a {
+  position: relative;
+  color: #a1a6b1;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.footer-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 1px;
+  background: #438dff;
+  transition: width 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+.footer-links a:hover::after {
+  width: 100%;
+}
+
+/* Responsive */
+
+@media (max-width: 650px) {
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 38px 22px;
+    gap: 28px;
+  }
+
+  .footer-links {
+    gap: 20px;
+    row-gap: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-links a,
+  .footer-links a::after {
+    transition: none;
+  }
+}

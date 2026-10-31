@@ -1,0 +1,287 @@
+
+/* =================================
+   DEXO3 LOADING SYSTEM
+   Premium Dark + Electric Blue
+================================= */
+
+:root {
+  --background: #080D19;
+  --blue: #1683FF;
+  --light-blue: #60B5FF;
+  --white: #FFFFFF;
+  --muted: #8493A8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Inter, Arial, sans-serif;
+  background: var(--background);
+  color: var(--white);
+}
+
+/* Main screen */
+
+.loading-screen {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(22, 131, 255, 0.10),
+      transparent 35%
+    ),
+    var(--background);
+}
+
+/* Background glow */
+
+.background-glow {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.glow-one {
+  background: var(--blue);
+  top: -180px;
+  left: -100px;
+}
+
+.glow-two {
+  background: #0055CC;
+  bottom: -200px;
+  right: -100px;
+}
+
+/* Main content */
+
+.loader-container {
+  width: min(380px, 85%);
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  animation: appear 1s ease both;
+}
+
+/* Logo */
+
+.logo-container {
+  width: 105px;
+  height: 105px;
+  margin: 0 auto 35px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.logo {
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  border-radius: 21px;
+  background: linear-gradient(
+    135deg,
+    #1683FF,
+    #60B5FF
+  );
+  box-shadow:
+    0 0 25px rgba(22, 131, 255, 0.4),
+    0 0 65px rgba(22, 131, 255, 0.15);
+  z-index: 2;
+}
+
+.logo span {
+  font-size: 40px;
+  font-weight: 900;
+  color: white;
+}
+
+/* Orbital animation */
+
+.orbit {
+  position: absolute;
+  border: 1px solid rgba(96, 181, 255, 0.45);
+  border-radius: 50%;
+}
+
+.orbit-one {
+  width: 100px;
+  height: 100px;
+  animation: rotate 5s linear infinite;
+}
+
+.orbit-two {
+  width: 125px;
+  height: 70px;
+  border-color: rgba(22, 131, 255, 0.35);
+  transform: rotate(-35deg);
+  animation: rotate-reverse 7s linear infinite;
+}
+
+/* Brand */
+
+.brand h1 {
+  font-size: 37px;
+  font-weight: 800;
+  letter-spacing: 5px;
+}
+
+.brand h1 span {
+  color: var(--light-blue);
+}
+
+.brand p {
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--muted);
+  margin-top: 7px;
+}
+
+/* Loading information */
+
+.loading-info {
+  margin-top: 65px;
+}
+
+.loading-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 12px;
+  color: var(--muted);
+}
+
+#loadingPercent {
+  color: var(--light-blue);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Progress bar */
+
+.progress-track {
+  height: 4px;
+  width: 100%;
+  background: #1A2638;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--blue),
+    var(--light-blue)
+  );
+  box-shadow: 0 0 12px rgba(22, 131, 255, 0.8);
+  transition: width 0.15s linear;
+}
+
+.loading-message {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 16px;
+}
+
+/* Footer */
+
+footer {
+  position: absolute;
+  bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #718096;
+}
+
+footer span:first-child {
+  color: var(--light-blue);
+  font-weight: 800;
+}
+
+.footer-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+/* Animations */
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rotate-reverse {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+  .loader-container {
+    width: 82%;
+  }
+
+  .logo-container {
+    transform: scale(0.9);
+  }
+
+  .brand h1 {
+    font-size: 32px;
+  }
+
+  .loading-info {
+    margin-top: 50px;
+  }
+
+  footer {
+    bottom: 20px;
+  }
+}
+
+/* Reduced motion accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

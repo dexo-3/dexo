@@ -1,0 +1,85 @@
+
+/* =====================================
+   DEXO3 FORMS
+===================================== */
+
+.dexo-form {
+  width: 100%;
+  max-width: 650px;
+  padding: 28px;
+  border: 1px solid var(--dexo-border);
+  border-radius: var(--radius-lg);
+  background: var(--dexo-surface);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  color: var(--dexo-text);
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.form-control,
+.dexo-form input,
+.dexo-form textarea,
+.dexo-form select {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+  border: 1px solid var(--dexo-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  background: #0B1220;
+  color: var(--dexo-text);
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.dexo-form textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.form-control:focus,
+.dexo-form input:focus,
+.dexo-form textarea:focus,
+.dexo-form select:focus {
+  border-color: var(--dexo-blue);
+  box-shadow: 0 0 0 3px rgba(22,131,255,.13);
+}
+
+.form-control::placeholder,
+.dexo-form input::placeholder,
+.dexo-form textarea::placeholder {
+  color: var(--dexo-subtle);
+}
+
+.form-help {
+  color: var(--dexo-muted);
+  font-size: .8rem;
+}
+
+.form-error {
+  color: var(--dexo-danger);
+  font-size: .82rem;
+}
+
+.form-success {
+  color: var(--dexo-success);
+  font-size: .82rem;
+}
+
+.form-submit {
+  width: 100%;
+  min-height: 48px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--dexo-gradient);
+  color: white;
+  font-weight: 700;
+}

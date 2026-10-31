@@ -1,0 +1,63 @@
+
+/* =====================================
+   DEXO3 LOADING SCREEN
+===================================== */
+
+.dexo-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  background: var(--dexo-bg);
+  color: var(--dexo-text);
+}
+
+.loading-content {
+  width: min(90%, 350px);
+  text-align: center;
+}
+
+.loading-logo {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  background: var(--dexo-gradient);
+  color: white;
+  font-size: 38px;
+  font-weight: 800;
+  box-shadow: var(--shadow-blue);
+}
+
+.loading-content h2 {
+  margin-bottom: 5px;
+}
+
+.loading-content h2 span {
+  color: var(--dexo-blue-light);
+}
+
+.loading-spinner {
+  width: 35px;
+  height: 35px;
+  margin: 28px auto;
+  border: 3px solid rgba(255,255,255,.12);
+  border-top-color: var(--dexo-blue);
+  border-radius: 50%;
+  animation: dexo-spin .8s linear infinite;
+}
+
+.loading-message {
+  font-size: .9rem;
+  color: var(--dexo-muted);
+}
+
+.loading-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .35s ease, visibility .35s ease;
+}

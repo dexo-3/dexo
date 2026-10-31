@@ -1,0 +1,92 @@
+
+/* =====================================
+   DEXO3 CARDS
+===================================== */
+
+.dexo-card,
+.product-card,
+.feature-card,
+.project-card,
+.stat-card {
+  min-width: 0;
+  padding: 25px;
+  border: 1px solid var(--dexo-border);
+  border-radius: var(--radius-lg);
+  background: var(--dexo-surface);
+  color: var(--dexo-text);
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    background .25s ease;
+}
+
+.dexo-card:hover,
+.product-card:hover,
+.feature-card:hover,
+.project-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(22,131,255,.6);
+  background: var(--dexo-surface-hover);
+}
+
+.product-icon,
+.card-icon {
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(22,131,255,.13);
+  color: var(--dexo-blue-light);
+  font-size: 25px;
+}
+
+.product-label {
+  color: var(--dexo-blue-light);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.product-info h3 {
+  margin-block: 12px;
+}
+
+.product-info p {
+  line-height: 1.7;
+}
+
+.product-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--dexo-blue-light);
+  font-weight: 650;
+}
+
+.card-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+.card-badge {
+  display: inline-flex;
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(22,131,255,.12);
+  color: var(--dexo-blue-light);
+  font-size: .75rem;
+  font-weight: 650;
+}
+
+.stat-card strong {
+  display: block;
+  margin-top: 12px;
+  font-size: 2rem;
+}
+
+.stat-card span {
+  color: var(--dexo-muted);
+  font-size: .85rem;
+}

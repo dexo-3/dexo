@@ -1,0 +1,68 @@
+
+/* =====================================
+   DEXO3 DESIGN TOKENS
+===================================== */
+
+:root {
+  /* Brand */
+  --dexo-blue: #1683FF;
+  --dexo-blue-light: #60B5FF;
+  --dexo-blue-dark: #075CC5;
+
+  /* Backgrounds */
+  --dexo-bg: #080D19;
+  --dexo-bg-soft: #0B1220;
+  --dexo-surface: #101827;
+  --dexo-surface-hover: #172338;
+
+  /* Text */
+  --dexo-text: #F7F9FC;
+  --dexo-muted: #9BA9BC;
+  --dexo-subtle: #718096;
+
+  /* Borders */
+  --dexo-border: rgba(255,255,255,0.10);
+  --dexo-border-strong: rgba(255,255,255,0.18);
+
+  /* Status */
+  --dexo-success: #35C98B;
+  --dexo-warning: #FFB84D;
+  --dexo-danger: #FF5D6C;
+
+  /* Gradients */
+  --dexo-gradient: linear-gradient(135deg, #1683FF, #60B5FF);
+  --dexo-dark-gradient: linear-gradient(135deg, #080D19, #101D32);
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Radius */
+  --radius-sm: 7px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-full: 999px;
+
+  /* Shadows */
+  --shadow-sm: 0 3px 12px rgba(0,0,0,.15);
+  --shadow-md: 0 10px 30px rgba(0,0,0,.22);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,.35);
+  --shadow-blue: 0 8px 30px rgba(22,131,255,.22);
+
+  /* Layout */
+  --container-width: 1200px;
+  --navbar-height: 72px;
+  --sidebar-width: 250px;
+
+  /* Motion */
+  --transition-fast: .18s ease;
+  --transition-normal: .3s ease;
+  --transition-slow: .5s ease;
+}

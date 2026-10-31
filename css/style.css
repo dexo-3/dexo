@@ -1,0 +1,169 @@
+
+/* =====================================
+   DEXO3 MAIN STYLESHEET
+===================================== */
+
+@import url("./variables.css");
+@import url("./typography.css");
+@import url("./animations.css");
+@import url("./navbar.css");
+@import url("./footer.css");
+@import url("./cards.css");
+@import url("./forms.css");
+@import url("./dashboard.css");
+@import url("./loading.css");
+@import url("./utilities.css");
+@import url("./responsive.css");
+
+/* GLOBAL RESET */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--dexo-bg);
+  overflow-x: hidden;
+}
+
+img, svg, video {
+  max-width: 100%;
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* PAGE LAYOUT */
+
+.dexo-container {
+  width: min(100% - 40px, var(--container-width));
+  margin-inline: auto;
+}
+
+.dexo-section {
+  padding-block: 90px;
+}
+
+.section-heading {
+  margin-bottom: 45px;
+  text-align: center;
+}
+
+/* HERO */
+
+.dexo-hero {
+  position: relative;
+  min-height: 650px;
+  display: grid;
+  place-items: center;
+  padding: 90px 20px;
+  overflow: hidden;
+  text-align: center;
+  background:
+    radial-gradient(
+      ellipse at 50% 35%,
+      rgba(22,131,255,.17),
+      transparent 60%
+    ),
+    var(--dexo-bg);
+}
+
+.dexo-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 850px;
+}
+
+.dexo-hero h1 {
+  margin-bottom: 25px;
+}
+
+.dexo-hero p {
+  max-width: 650px;
+  margin: 0 auto 30px;
+  font-size: 1.1rem;
+}
+
+/* BUTTONS */
+
+.dexo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px 22px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-weight: 650;
+  transition: var(--transition-normal);
+}
+
+.dexo-btn-primary {
+  background: var(--dexo-gradient);
+  color: white;
+  box-shadow: var(--shadow-blue);
+}
+
+.dexo-btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(22,131,255,.35);
+}
+
+.dexo-btn-secondary {
+  background: var(--dexo-surface);
+  border-color: var(--dexo-border);
+  color: var(--dexo-text);
+}
+
+.dexo-btn-secondary:hover {
+  border-color: var(--dexo-blue);
+  background: var(--dexo-surface-hover);
+}
+
+/* GRIDS */
+
+.dexo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.dexo-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dexo-grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* DIVIDERS */
+
+.dexo-divider {
+  height: 1px;
+  border: 0;
+  background: var(--dexo-border);
+  margin-block: 30px;
+}
+
+/* SELECTION */
+
+::selection {
+  background: var(--dexo-blue);
+  color: white;
+}

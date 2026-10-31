@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080D19">
+  <meta name="description" content="Loading DEXO3 digital ecosystem.">
+  <title>Loading — DEXO3</title>
+  <link rel="stylesheet" href="loading.css">
+</head>
+
+<body>
+  <main class="loading-screen" id="loadingScreen">
+
+    <!-- Animated background -->
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+    <!-- Main loading content -->
+    <div class="loader-container">
+
+      <!-- DEXO3 Logo -->
+      <div class="logo-container">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="logo">
+          <span>D</span>
+        </div>
+      </div>
+
+      <!-- Brand -->
+      <div class="brand">
+        <h1>DEXO<span>3</span></h1>
+        <p>ALL SIMPLIFIED.</p>
+      </div>
+
+      <!-- Loading indicator -->
+      <div class="loading-info">
+        <div class="loading-label">
+          <span id="loadingText">Initializing DEXO3</span>
+          <span id="loadingPercent">0%</span>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <p class="loading-message" id="loadingMessage">
+          Preparing your digital experience...
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <span>DEXO3</span>
+      <span class="footer-dot"></span>
+      <span>Everything. Connected.</span>
+    </footer>
+
+  </main>
+
+  <script>
+    const progressBar = document.getElementById("progressBar");
+    const percentText = document.getElementById("loadingPercent");
+    const loadingText = document.getElementById("loadingText");
+    const loadingMessage = document.getElementById("loadingMessage");
+
+    const messages = [
+      "Initializing DEXO3",
+      "Preparing the interface",
+      "Loading digital components",
+      "Almost ready"
+    ];
+
+    let progress = 0;
+
+    const loader = setInterval(() => {
+      progress += Math.floor(Math.random() * 5) + 2;
+
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(loader);
+
+        loadingText.textContent = "Ready";
+        loadingMessage.textContent = "Welcome to DEXO3.";
+
+        setTimeout(() => {
+          window.location.href = "../index.html";
+        }, 500);
+      } else {
+        const messageIndex = Math.min(
+          Math.floor(progress / 25),
+          messages.length - 1
+        );
+
+        loadingText.textContent = messages[messageIndex];
+        loadingMessage.textContent =
+          "Preparing your digital experience...";
+      }
+
+      progressBar.style.width = progress + "%";
+      percentText.textContent = progress + "%";
+
+    }, 100);
+  </script>
+
+</body>
+</html>
