@@ -1,0 +1,2 @@
+# dexo
+all simplified
