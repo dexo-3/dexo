@@ -7,7 +7,7 @@ DEXO3 is a digital ecosystem project designed to bring education, creativity, AI
 
 ## Website
 
-https://dexo3.wasmer.app
+
 
 ## Project structure
 
